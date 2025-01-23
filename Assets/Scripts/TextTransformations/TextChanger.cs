@@ -7,12 +7,19 @@ public class TextChanger : MonoBehaviour
     [SerializeField] private Text _text;
     [SerializeField] private float _delay;
     [SerializeField] private float _duration;
+    [SerializeField] private int _repeats;
+    [SerializeField] private LoopType _loopType;
 
     private string _changedText = "Заменил";
     private string _addedText = " и добавил";
     private string _scrambledText = "Перебрал буквы";
 
     private void Start()
+    {
+        CreateSequence().Play();
+    }
+
+    private Sequence CreateSequence()
     {
         Tweener tweenerChange = _text.DOText(_changedText, _duration).SetDelay(_delay);
         Tweener tweenerAdd = _text.DOText(_addedText, _duration).SetRelative().SetDelay(_delay);
@@ -22,8 +29,9 @@ public class TextChanger : MonoBehaviour
 
         sequence.Append(tweenerChange)
             .Append(tweenerAdd)
-            .Append(tweenerScramble);
+            .Append(tweenerScramble)
+            .SetLoops(_repeats, _loopType);
 
-        sequence.Play();
+        return sequence;
     }
 }
