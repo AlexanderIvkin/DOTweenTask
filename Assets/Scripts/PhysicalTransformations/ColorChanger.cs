@@ -13,13 +13,17 @@ public class ColorChanger : LoopedTween
         _material = GetComponent<Renderer>().material;
     }
 
-    protected override Sequence ExecuteTween()
+    protected override Tweener GetTweenForLoop()
     {
-        Sequence sequence = DOTween.Sequence();
-        sequence.Append(_material.DOColor(GenerateColor(), Duration))
-            .OnStepComplete(() => _material.DOColor(GenerateColor(), Duration));
+        Tweener tweener = ChangeColorTweener()
+            .OnStepComplete(() => ChangeColorTweener());
 
-        return sequence;
+        return tweener;
+    }
+
+    private Tweener ChangeColorTweener()
+    {
+        return _material.DOColor(GenerateColor(), Duration);
     }
 
     private Color GenerateColor()
